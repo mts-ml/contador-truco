@@ -11,6 +11,11 @@ interface TeamsNamesErrors {
     secondTeam?: string
 }
 
+interface TeamPoints {
+    firstTeamPoints: number
+    secondTeamPoints: number
+}
+
 
 export const Home: React.FC = () => {
     const [menuOpen, setMenuOpen] = useState(false)
@@ -19,6 +24,11 @@ export const Home: React.FC = () => {
 
     const [teamsName, setTeamsName] = useState<TeamsNames>(getItemsfromLocalStorage)
     const [savedTeamsName, setSavedTeamsName] = useState<TeamsNames>(getItemsfromLocalStorage)
+
+    const [points, setPoints] = useState<TeamPoints>({
+        firstTeamPoints: 0,
+        secondTeamPoints: 0
+    })
 
     function getItemsfromLocalStorage() {
         const storedTeamsNames = localStorage.getItem("TeamsNames")
@@ -78,7 +88,7 @@ export const Home: React.FC = () => {
 
     return (
         <>
-            <header className="relative flex items-center bg-black h-12">
+            <header className="relative z-50 flex items-center bg-black h-12">
                 <button
                     className={`relative ml-6 hover:bg-white/30 w-8 h-8 rounded-full transition-colors duration-500 ease-in-out ${menuOpen ? "toggle-btn" : ""}`}
                     aria-label={menuOpen ? "Click to close menu" : "Click to open menu"}
@@ -94,7 +104,8 @@ export const Home: React.FC = () => {
                 <h1 className="absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 text-white mx-auto font-semibold">Contador Truco</h1>
             </header>
 
-            <section className="px-6">
+            {/* MENU */}
+            <section className={`absolute z-40 w-full h-[94.7%] transition-all duration-1000 ease-in-out bg-white  px-6 ${menuOpen ? "top-12 max-h-[1000px] opacity-100 scale-y-100" : "pointer-events-none top-12 max-h-0 opacity-0 scale-y-95"}`}>
                 <h4 className="mt-6 mb-4 font-bold">Equipes</h4>
 
                 {/* 1ª equipe */}
@@ -146,8 +157,7 @@ export const Home: React.FC = () => {
                 </button>
             </section>
 
-            <main>
-
+            <main className="relative z-30">
                 <div className="bg-stone-500 px-6 pb-6">
                     <h2 className="text-white text-center font-medium py-2">Placar geral:</h2>
 
@@ -155,12 +165,12 @@ export const Home: React.FC = () => {
                         <div className="flex rounded-lg bg-[#333] text-white font-medium h-[87.6vh]">
                             <section className="flex flex-col items-center pt-10 w-1/2 border-r-4">
                                 <h3>{savedTeamsName.firstTeam}</h3>
-                                <p>0</p>
+                                <p>{points.firstTeamPoints}</p>
                             </section>
 
                             <section className="flex flex-col items-center pt-10 w-1/2">
                                 <h3>{savedTeamsName.secondTeam}</h3>
-                                <p>0</p>
+                                <p>{points.secondTeamPoints}</p>
                             </section>
                         </div>
                     </div>
