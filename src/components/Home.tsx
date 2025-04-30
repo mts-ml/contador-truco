@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useState } from "react"
 
 
 interface TeamsNames {
@@ -17,30 +17,21 @@ export const Home: React.FC = () => {
 
     const [namesAreValid, setNamesAreValid] = useState(false)
 
-    const [teamsName, setTeamsName] = useState<TeamsNames>({
-        firstTeam: "Ele",
-        secondTeam: "Ela"
-    })
+    const [teamsName, setTeamsName] = useState<TeamsNames>(getItemsfromLocalStorage)
+    const [savedTeamsName, setSavedTeamsName] = useState<TeamsNames>(getItemsfromLocalStorage)
 
-    const [savedTeamsName, setSavedTeamsName] = useState<TeamsNames>({
-        firstTeam: "Ele",
-        secondTeam: "Ela"
-    })
+    function getItemsfromLocalStorage() {
+        const storedTeamsNames = localStorage.getItem("TeamsNames")
+
+        return storedTeamsNames ? JSON.parse(storedTeamsNames) : {
+            firstTeam: "Ele", secondTeam: "Ela"
+        }
+    }
 
     const [errors, setErrors] = useState<TeamsNamesErrors>({})
 
-    useEffect(() => {
-        const storedTeams = localStorage.getItem("TeamsNames")
-
-        if (storedTeams) {
-            setSavedTeamsName(JSON.parse(storedTeams))
-        }
-    }, [])
-
-
     function handleTeamsName(event: React.ChangeEvent<HTMLInputElement>) {
         const { name, value } = event.currentTarget
-
         const onlyLettersRegex = /^[A-Za-zÀ-ÿ\s]+$/;
 
         setTeamsName(previousNames => {
@@ -119,7 +110,7 @@ export const Home: React.FC = () => {
                     type="text"
                     id="team1"
                     name="firstTeam"
-                    value={savedTeamsName.firstTeam}
+                    value={teamsName.firstTeam}
                     onChange={handleTeamsName}
                 />
                 {errors.firstTeam && (
@@ -140,7 +131,7 @@ export const Home: React.FC = () => {
                     type="text"
                     id="team2"
                     name="secondTeam"
-                    value={savedTeamsName.secondTeam}
+                    value={teamsName.secondTeam}
                     onChange={handleTeamsName}
                 />
                 {errors.secondTeam && (
