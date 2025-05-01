@@ -169,7 +169,7 @@ export const Home: React.FC = () => {
                     onChange={handleTeamsName}
                 />
                 {errors.firstTeam && (
-                    <p className="text-red-700">{errors.firstTeam}</p>
+                    <p className="text-red-700" aria-live="assertive">{errors.firstTeam}</p>
                 )}
 
 
@@ -190,12 +190,13 @@ export const Home: React.FC = () => {
                     onChange={handleTeamsName}
                 />
                 {errors.secondTeam && (
-                    <p className="text-red-700">{errors.secondTeam}</p>
+                    <p className="text-red-700" aria-live="assertive">{errors.secondTeam}</p>
                 )}
 
                 <button
                     className="text-white rounded-md w-full py-[7px] px-4 mt-6 bg-green-900"
                     onClick={handleSaveTeamsName}
+                    aria-label={`Salvar nome das equipes: ${teamsName.firstTeam} e ${teamsName.secondTeam}`}
                 >
                     Salvar
                 </button>
@@ -210,7 +211,9 @@ export const Home: React.FC = () => {
 
                             <div className="absolute top-0 w-full h-full bg-white/30 backdrop-blur-md" />
 
-                            <div className="absolute top-1/3 -translate-y-1/3 left-1/2 -translate-x-1/2 bg-white/70 px-6 w-[80%] max-w-[500px] h-[200px] rounded-md flex flex-col items-center justify-center">
+                            <div className="absolute top-1/3 -translate-y-1/3 left-1/2 -translate-x-1/2 bg-white/70 px-6 w-[80%] max-w-[500px] h-[200px] rounded-md flex flex-col items-center justify-center"
+                                aria-live="polite"
+                            >
                                 <p>
                                     Parábens! Time <b>{points.firstTeamPoints >= 12 ? `${teamsName.firstTeam}` : `${teamsName.secondTeam}`}</b> venceu 🥳🥳🥳!!!
                                 </p>
@@ -231,11 +234,16 @@ export const Home: React.FC = () => {
 
 
                     <div className="relative flex items-center text-white font-bold justify-around mt-6 mb-4">
-                        <p>{overallScore.firstTeamPoints}</p>
-                        <p>{overallScore.secondTeamPoints}</p>
+                        <p aria-label={`Placar do time ${savedTeamsName.firstTeam}`}>
+                            {overallScore.firstTeamPoints}
+                        </p>
+
+                        <p aria-label={`Placar do time ${savedTeamsName.secondTeam}`}>
+                            {overallScore.secondTeamPoints}
+                        </p>
 
                         <button
-                            className="absolute py-[5px] px-3 w-fit mx-auto text-sm text-white font-bold border hover:bg-black transition-colors duration-500 ease-in-out rounded-3xl"
+                            className="absolute py-[5px] px-3 w-fit mx-auto text-sm text-white font-bold border hover:bg-black transition-colors duration-500 ease-in-out rounded-3xl focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-black"
                             onClick={() => setOverallScore({ firstTeamPoints: 0, secondTeamPoints: 0 })}
                         >
                             Zerar placar
@@ -256,6 +264,7 @@ export const Home: React.FC = () => {
                                         <button
                                             className="bg-[#111] px-4 py-[7px] rounded-3xl"
                                             onClick={() => handlePoints("firstTeam", -1)}
+                                            aria-label={`Remover 1 ponto da equipe ${teamsName.firstTeam}`}
                                         >
                                             - 1
                                         </button>
@@ -263,6 +272,7 @@ export const Home: React.FC = () => {
                                         <button
                                             className="bg-[#111] px-4 py-[7px] rounded-3xl"
                                             onClick={() => handlePoints("firstTeam", 1)}
+                                            aria-label={`Adicionar 1 ponto para a equipe ${teamsName.firstTeam}`}
                                         >
                                             + 1
                                         </button>
@@ -272,6 +282,7 @@ export const Home: React.FC = () => {
                                         <button
                                             className="bg-[#111] px-4 py-[7px] rounded-3xl"
                                             onClick={() => handlePoints("firstTeam", -3)}
+                                            aria-label={`Remover 3 pontos da equipe ${teamsName.firstTeam}.`}
                                         >
                                             - 3
                                         </button>
@@ -279,6 +290,7 @@ export const Home: React.FC = () => {
                                         <button
                                             className="bg-[#111] px-4 py-[7px] rounded-3xl"
                                             onClick={() => handlePoints("firstTeam", 3)}
+                                            aria-label={`Adicionar 3 pontos para a equipe ${teamsName.firstTeam}.`}
                                         >
                                             + 3
                                         </button>
@@ -288,6 +300,7 @@ export const Home: React.FC = () => {
                                         <button
                                             className="bg-[#111] px-4 py-[7px] rounded-3xl"
                                             onClick={() => handlePoints("firstTeam", -6)}
+                                            aria-label={`Remover 6 pontos da equipe ${teamsName.firstTeam}.`}
                                         >
                                             - 6
                                         </button>
@@ -295,6 +308,7 @@ export const Home: React.FC = () => {
                                         <button
                                             className="bg-[#111] px-4 py-[7px] rounded-3xl"
                                             onClick={() => handlePoints("firstTeam", 6)}
+                                            aria-label={`Adicionar 6 pontos para a equipe ${teamsName.firstTeam}.`}
                                         >
                                             + 6
                                         </button>
@@ -313,6 +327,7 @@ export const Home: React.FC = () => {
                                         <button
                                             className="bg-[#111] px-4 py-[7px] rounded-3xl"
                                             onClick={() => handlePoints("secondTeam", -1)}
+                                            aria-label={`Remover 1 ponto da equipe ${teamsName.secondTeam}.`}
                                         >
                                             - 1
                                         </button>
@@ -320,6 +335,7 @@ export const Home: React.FC = () => {
                                         <button
                                             className="bg-[#111] px-4 py-[7px] rounded-3xl"
                                             onClick={() => handlePoints("secondTeam", 1)}
+                                            aria-label={`Adicionar 1 ponto para a equipe ${teamsName.secondTeam}.`}
                                         >
                                             + 1
                                         </button>
@@ -329,6 +345,7 @@ export const Home: React.FC = () => {
                                         <button
                                             className="bg-[#111] px-4 py-[7px] rounded-3xl"
                                             onClick={() => handlePoints("secondTeam", -3)}
+                                            aria-label={`Remover 3 pontos da equipe ${teamsName.secondTeam}.`}
                                         >
                                             - 3
                                         </button>
@@ -336,6 +353,8 @@ export const Home: React.FC = () => {
                                         <button
                                             className="bg-[#111] px-4 py-[7px] rounded-3xl"
                                             onClick={() => handlePoints("secondTeam", 3)}
+                                            aria-label={`Adicionar 3 pontos para a equipe ${teamsName.secondTeam}.`}
+
                                         >
                                             + 3
                                         </button>
@@ -345,6 +364,8 @@ export const Home: React.FC = () => {
                                         <button
                                             className="bg-[#111] px-4 py-[7px] rounded-3xl"
                                             onClick={() => handlePoints("secondTeam", -6)}
+                                            aria-label={`Remover 6 pontos da equipe ${teamsName.secondTeam}.`}
+
                                         >
                                             - 6
                                         </button>
@@ -352,6 +373,8 @@ export const Home: React.FC = () => {
                                         <button
                                             className="bg-[#111] px-4 py-[7px] rounded-3xl"
                                             onClick={() => handlePoints("secondTeam", 6)}
+                                            aria-label={`Adicionar 6 pontos para a equipe ${teamsName.secondTeam}.`}
+
                                         >
                                             + 6
                                         </button>
