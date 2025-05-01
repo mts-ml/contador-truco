@@ -1,4 +1,5 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
+import Confetti from 'react-confetti'
 
 
 interface TeamsNames {
@@ -22,7 +23,15 @@ export const Home: React.FC = () => {
 
     const [namesAreValid, setNamesAreValid] = useState(false)
 
+    const [isGameOver, setIsGameOver] = useState(false)
+
+    const [overallScore, setOverallScore] = useState<TeamPoints>({
+        firstTeamPoints: 0,
+        secondTeamPoints: 0
+    })
+
     const [teamsName, setTeamsName] = useState<TeamsNames>(getItemsfromLocalStorage)
+
     const [savedTeamsName, setSavedTeamsName] = useState<TeamsNames>(getItemsfromLocalStorage)
 
     const [points, setPoints] = useState<TeamPoints>({
@@ -85,6 +94,41 @@ export const Home: React.FC = () => {
         }
     }
 
+    function handlePoints(whichTeam: "firstTeam" | "secondTeam", amount: number) {
+        setPoints(prevTeam => {
+            const team = whichTeam === "firstTeam" ? "firstTeamPoints" : "secondTeamPoints"
+
+
+            return {
+                ...prevTeam,
+                [team]: Math.max(0, prevTeam[team] + amount)
+            }
+        })
+    }
+
+    useEffect(() => {
+        if (points.firstTeamPoints >= 12 || points.secondTeamPoints >= 12) {
+            setIsGameOver(true)
+        } else {
+            setIsGameOver(false)
+        }
+    }, [points])
+
+    function newGame() {
+        const firstTeamWon = points.firstTeamPoints >= 12
+
+        setOverallScore(prevOverallScore => ({
+            firstTeamPoints: prevOverallScore.firstTeamPoints + (firstTeamWon ? 1 : 0),
+            secondTeamPoints: prevOverallScore.secondTeamPoints + (firstTeamWon ? 0 : 1)
+        }))
+
+        setIsGameOver(false)
+
+        setPoints({
+            firstTeamPoints: 0,
+            secondTeamPoints: 0
+        })
+    }
 
     return (
         <>
@@ -158,19 +202,161 @@ export const Home: React.FC = () => {
             </section>
 
             <main className="relative z-30">
+                {/* End of game */}
+                {
+                    isGameOver && (
+                        <div>
+                            <Confetti />
+
+                            <div className="absolute top-0 w-full h-full bg-white/30 backdrop-blur-md" />
+
+                            <div className="absolute top-1/3 -translate-y-1/3 left-1/2 -translate-x-1/2 bg-white/70 px-6 w-[80%] max-w-[500px] h-[200px] rounded-md flex flex-col items-center justify-center">
+                                <p>
+                                    Parábens! Time <b>{points.firstTeamPoints >= 12 ? `${teamsName.firstTeam}` : `${teamsName.secondTeam}`}</b> venceu 🥳🥳🥳!!!
+                                </p>
+
+                                <button
+                                    className="mt-6 mb-8 py-[7px] px-4 border border-black rounded-3xl bg-black/30 hover:bg-black/40 transition-colors duration-500 ease-in-out"
+                                    onClick={newGame}
+                                >
+                                    Clique para jogar novamente
+                                </button>
+                            </div>
+                        </div>
+                    )
+                }
+
                 <div className="bg-stone-500 px-6 pb-6">
-                    <h2 className="text-white text-center font-medium py-2">Placar geral:</h2>
+                    <h2 className="text-white text-center font-medium py-2">Placar geral</h2>
+
+
+                    <div className="relative flex items-center text-white font-bold justify-around mt-6 mb-4">
+                        <p>{overallScore.firstTeamPoints}</p>
+                        <p>{overallScore.secondTeamPoints}</p>
+
+                        <button
+                            className="absolute py-[5px] px-3 w-fit mx-auto text-sm text-white font-bold border hover:bg-black transition-colors duration-500 ease-in-out rounded-3xl"
+                            onClick={() => setOverallScore({ firstTeamPoints: 0, secondTeamPoints: 0 })}
+                        >
+                            Zerar placar
+                        </button>
+                    </div>
 
                     <div>
                         <div className="flex rounded-lg bg-[#333] text-white font-medium h-[87.6vh]">
+
+                            {/* 1º TEAM */}
                             <section className="flex flex-col items-center pt-10 w-1/2 border-r-4">
                                 <h3>{savedTeamsName.firstTeam}</h3>
+
                                 <p>{points.firstTeamPoints}</p>
+
+                                <div className="flex flex-col items-center justify-evenly h-2/3 w-full">
+                                    <div className="mt-10 flex items-center justify-around w-full">
+                                        <button
+                                            className="bg-[#111] px-4 py-[7px] rounded-3xl"
+                                            onClick={() => handlePoints("firstTeam", -1)}
+                                        >
+                                            - 1
+                                        </button>
+
+                                        <button
+                                            className="bg-[#111] px-4 py-[7px] rounded-3xl"
+                                            onClick={() => handlePoints("firstTeam", 1)}
+                                        >
+                                            + 1
+                                        </button>
+                                    </div>
+
+                                    <div className="mt-10 flex items-center justify-around w-full">
+                                        <button
+                                            className="bg-[#111] px-4 py-[7px] rounded-3xl"
+                                            onClick={() => handlePoints("firstTeam", -3)}
+                                        >
+                                            - 3
+                                        </button>
+
+                                        <button
+                                            className="bg-[#111] px-4 py-[7px] rounded-3xl"
+                                            onClick={() => handlePoints("firstTeam", 3)}
+                                        >
+                                            + 3
+                                        </button>
+                                    </div>
+
+                                    <div className="mt-10 flex items-center justify-around w-full">
+                                        <button
+                                            className="bg-[#111] px-4 py-[7px] rounded-3xl"
+                                            onClick={() => handlePoints("firstTeam", -6)}
+                                        >
+                                            - 6
+                                        </button>
+
+                                        <button
+                                            className="bg-[#111] px-4 py-[7px] rounded-3xl"
+                                            onClick={() => handlePoints("firstTeam", 6)}
+                                        >
+                                            + 6
+                                        </button>
+                                    </div>
+                                </div>
                             </section>
 
+                            {/* 2º TEAM */}
                             <section className="flex flex-col items-center pt-10 w-1/2">
                                 <h3>{savedTeamsName.secondTeam}</h3>
+
                                 <p>{points.secondTeamPoints}</p>
+
+                                <div className="flex flex-col items-center justify-evenly h-2/3 w-full">
+                                    <div className="mt-10 flex items-center justify-around w-full">
+                                        <button
+                                            className="bg-[#111] px-4 py-[7px] rounded-3xl"
+                                            onClick={() => handlePoints("secondTeam", -1)}
+                                        >
+                                            - 1
+                                        </button>
+
+                                        <button
+                                            className="bg-[#111] px-4 py-[7px] rounded-3xl"
+                                            onClick={() => handlePoints("secondTeam", 1)}
+                                        >
+                                            + 1
+                                        </button>
+                                    </div>
+
+                                    <div className="mt-10 flex items-center justify-around w-full">
+                                        <button
+                                            className="bg-[#111] px-4 py-[7px] rounded-3xl"
+                                            onClick={() => handlePoints("secondTeam", -3)}
+                                        >
+                                            - 3
+                                        </button>
+
+                                        <button
+                                            className="bg-[#111] px-4 py-[7px] rounded-3xl"
+                                            onClick={() => handlePoints("secondTeam", 3)}
+                                        >
+                                            + 3
+                                        </button>
+                                    </div>
+
+                                    <div className="mt-10 flex items-center justify-around w-full">
+                                        <button
+                                            className="bg-[#111] px-4 py-[7px] rounded-3xl"
+                                            onClick={() => handlePoints("secondTeam", -6)}
+                                        >
+                                            - 6
+                                        </button>
+
+                                        <button
+                                            className="bg-[#111] px-4 py-[7px] rounded-3xl"
+                                            onClick={() => handlePoints("secondTeam", 6)}
+                                        >
+                                            + 6
+                                        </button>
+                                    </div>
+                                </div>
                             </section>
                         </div>
                     </div>
