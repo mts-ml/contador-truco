@@ -95,13 +95,12 @@ export const Home: React.FC = () => {
     }
 
     function handlePoints(whichTeam: "firstTeam" | "secondTeam", amount: number) {
-        setPoints(prevTeam => {
+        setPoints(previousPoints => {
             const team = whichTeam === "firstTeam" ? "firstTeamPoints" : "secondTeamPoints"
 
-
             return {
-                ...prevTeam,
-                [team]: Math.max(0, prevTeam[team] + amount)
+                ...previousPoints,
+                [team]: Math.max(0, previousPoints[team] + amount)
             }
         })
     }
