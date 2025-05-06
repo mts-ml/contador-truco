@@ -225,7 +225,7 @@ export const Home: React.FC = () => {
 
                     <div className="flex rounded-lg bg-[#333] text-white font-medium">
                         {/* 1º TEAM */}
-                        <section className="flex flex-col items-center pt-10 w-1/2 border-r-4 pb-6 min-h-[calc(100vh-212px)]">
+                        <section className="flex flex-col items-center pt-10 w-1/2 border-r-4 pb-6 min-h-[calc(100dvh-212px)]">
                             <h3 className="text-xl">{savedTeamsName.firstTeam}</h3>
 
                             <p className="text-4xl mt-3">{points.firstTeamPoints}</p>
